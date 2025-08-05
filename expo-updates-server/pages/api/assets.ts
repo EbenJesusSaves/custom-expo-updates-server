@@ -10,7 +10,31 @@ import {
   getMetadataAsync,
 } from '../../common/helpers';
 
+// Add CORS headers for cross-origin requests
+function setCorsHeaders(res: NextApiResponse) {
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'];
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.join(','));
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 export default async function assetsEndpoint(req: NextApiRequest, res: NextApiResponse) {
+  setCorsHeaders(res);
+
+  // Log incoming asset requests
+  console.log('📦 Asset request received:', {
+    method: req.method,
+    asset: req.query.asset,
+    runtimeVersion: req.query.runtimeVersion,
+    platform: req.query.platform,
+    timestamp: new Date().toISOString(),
+  });
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   const { asset: assetName, runtimeVersion, platform } = req.query;
 
   if (!assetName || typeof assetName !== 'string') {

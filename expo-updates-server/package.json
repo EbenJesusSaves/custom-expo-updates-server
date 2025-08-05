@@ -13,7 +13,9 @@
     "expo-publish-test": "./scripts/publish.sh -d test/$(date +%s)"
   },
   "dependencies": {
+    "@types/formidable": "^3.4.5",
     "form-data": "^4.0.0",
+    "formidable": "^3.5.4",
     "mime": "^2.5.2",
     "next": "12",
     "react": "^18.0.0",

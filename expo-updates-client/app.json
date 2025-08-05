@@ -1,19 +1,16 @@
 {
   "expo": {
-    "name": "expo-updates-client",
-    "slug": "expo-updates-client",
-    "owner": "anonymous",
+    "name": "partnerApp",
+    "slug": "partnerApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./assets/favicon.png",
+    "scheme": "partnerapp",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "runtimeVersion": "1",
     "updates": {
-      "url": "http://localhost:3000/api/manifest",
+      "url": "http://10.0.2.2:3000/api/manifest",
       "enabled": true,
       "fallbackToCacheTimeout": 30000,
       "codeSigningCertificate": "./code-signing/certificate.pem",
@@ -27,14 +24,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.test.expo-updates-client"
+      "bundleIdentifier": "com.mtn.partnerapp"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/favicon.png",
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.test.expoupdatesclient"
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.mtn.partnerapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -44,11 +44,36 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": true
+            "usesCleartextTraffic": true,
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "enableSeparateBuildPerCPUArchitecture": false,
+            "networkSecurityConfig": "./network_security_config.xml"
           },
           "ios": {}
         }
-      ]
-    ]
+      ],
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/favicon.png",
+          "imageWidth": 500,
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "eaa78f36-687c-463f-9fee-9aa5459fe762"
+      }
+    }
   }
 }

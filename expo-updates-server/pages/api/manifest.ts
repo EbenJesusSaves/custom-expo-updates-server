@@ -17,7 +17,39 @@ import {
   createNoUpdateAvailableDirectiveAsync,
 } from '../../common/helpers';
 
+// Add CORS headers for cross-origin requests
+function setCorsHeaders(res: NextApiResponse) {
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'];
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.join(','));
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, expo-protocol-version, expo-platform, expo-runtime-version, expo-current-update-id, expo-embedded-update-id, expo-expect-signature'
+  );
+}
+
 export default async function manifestEndpoint(req: NextApiRequest, res: NextApiResponse) {
+  setCorsHeaders(res);
+
+  // Log incoming update requests
+  console.log('📱 Update request received:', {
+    method: req.method,
+    url: req.url,
+    headers: {
+      'expo-platform': req.headers['expo-platform'],
+      'expo-runtime-version': req.headers['expo-runtime-version'],
+      'expo-protocol-version': req.headers['expo-protocol-version'],
+      'expo-current-update-id': req.headers['expo-current-update-id'],
+      'user-agent': req.headers['user-agent'],
+    },
+    timestamp: new Date().toISOString(),
+  });
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'GET') {
     res.statusCode = 405;
     res.json({ error: 'Expected GET.' });
